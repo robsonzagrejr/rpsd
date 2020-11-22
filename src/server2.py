@@ -6,9 +6,9 @@ if __name__ == '__main__':
     clients = []
     time_start = time.time()
     for i in range(10):
-        c = Client(name=f'Client_{i}')
+        c = Client(name=f'Client_{i}', p_replicator=None)
         clients.append(c)
-        c.start()
+        c.run_kaka()
 
     for c in clients:
         c.join()

@@ -1,15 +1,12 @@
-from PyQt5.QtWidgets import QApplication
+from src.server.replicator import Replicator
 
-from gui.window import (
-    Window
-)
-from sgi.world import (
-    World
-)
+if __name__ == '__main__':
+    replicators = []
+    replicators.append(Replicator(name='R1', port=8000))
+    replicators.append(Replicator(name='R2', port=8001))
 
-app = QApplication([])
+    for r in replicators:
+        r.start()
 
-world = World()
-window = Window(world)
-
-app.exec_()
+    for r in replicators:
+        r.join()
