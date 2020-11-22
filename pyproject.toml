@@ -1,0 +1,17 @@
+[tool.poetry]
+name       = "rpsd"
+version = "1.0.0"
+authors    = ["Robson Zagre Junior <r.zagre.jr@gmail.com>"]
+description = "Implementação de Replicação Passiva em Sistemas Distribuidos"
+repository = "https://github.com/robsonzagrejr/rpsd"
+packages = [
+    { include = "src" },
+]
+
+[tool.poetry.dependencies]
+python  = "^3.8.0"
+Flask = "^1.1.1"
+
+
+[build-system]
+requires      = ["poetry>=1.0.0"]
