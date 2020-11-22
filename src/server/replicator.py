@@ -1,6 +1,11 @@
 from multiprocessing import Process
-from flask import Flask, Response
+from flask import Flask, Response, request
+#from flask_restful import Api, Resource, reqparse
+from pathlib import Path
+import __main__
 
+import os
+import json
 
 class EndpointAction(object):
 
@@ -9,50 +14,164 @@ class EndpointAction(object):
 
     def __call__(self, *args):
         # Perform the action
-        answer = self.action()
+        answer, status = self.action()
+        return Response(answer, status=status)
 
-        # Create the answer (budle it in a correctly formatted HTTP answer)
-        self.response = Response(answer, status=200, headers={})
-        # Send it
-        return self.response
 
 
 class Replicator(Process):
 
-    def __init__(self, name, port):
+    def __init__(self, name, port, primary=False):
         Process.__init__(self, name=name)
+
+        # File System
+        self.backup_path = f'filesystem/backup_{self.name.lower()}'
+        os.system(f'rm -rf {self.backup_path}')
+        os.system(f'mkdir -p {self.backup_path}')
+ 
+        # Server definitions
         self.app = Flask(name)
         self.name = name
         self.port = port
-        self.add_endpoint(endpoint='/', endpoint_name='/',
-                handler=self.hello_world)
 
-    def run(self):
-        self.app.run(host='0.0.0.0', port=self.port, debug=False)
+        # Routes
+        if not primary:
+            self.add_endpoint(endpoint='/', handler=self.hello_world)
+            self.add_endpoint(endpoint='/data', handler=self.data, methods=['POST'])
+            self.add_endpoint(endpoint='/create_file', handler=self.create_file, methods=['POST'])
+            self.add_endpoint(endpoint='/update_file', handler=self.update_file, methods=['POST'])
+            self.add_endpoint(endpoint='/append_file', handler=self.append_file, methods=['POST'])
+            self.add_endpoint(endpoint='/delete_file', handler=self.delete_file, methods=['POST'])
+            self.add_endpoint(endpoint='/get_file', handler=self.get_file, methods=['POST'])
+
         return
 
-    def hello_world(self):
-        return f'Hello, World! my name is {self.name}'
-
-    def add_endpoint(self, endpoint=None, endpoint_name=None, handler=None):
-        self.app.add_url_rule(endpoint, endpoint_name, EndpointAction(handler))
-
-
-"""
-class Replicator(Process):
-    app = Flask(__name__)
-
-    def __init__(self, name, port):
-        Process.__init__(self, name=name)
-        self.name = name
-        self.port = port
 
     def run(self):
         self.app.run(host='0.0.0.0', port=self.port, debug=True)
         return
 
-    @app.route('/')
-    def hello_world():
-        return f'Hello, World! my name is {name}'
 
-"""
+    def add_endpoint(self, endpoint=None, handler=None, methods=['GET']):
+        self.app.add_url_rule(rule=endpoint, endpoint=endpoint, view_func=EndpointAction(handler),
+                              methods=methods)
+
+
+    def hello_world(self):
+        return f'Hello, World! my name is {self.name}', 200
+
+
+    def data(self):
+        try:
+            data = request.get_json()
+            return json.dumps(data), 200
+        except:
+            return f"Replicator {self.name} except json data", 400
+
+
+    def make_data_return(self, data):
+        return json.dumps(
+            {
+                'name':self.name,
+                'data':data
+            }
+        )
+
+    def check_file_exist(self, file_name):
+        main_path = Path(__main__.__file__).parent
+        return os.path.exists(f'{main_path}/{file_name}')
+
+    
+    def get_data(self, msg='Except json data'):
+        try:
+            data = request.get_json()
+            if data:
+                if 'file_name' not in data.keys() or 'text' not in data.keys():
+                    return self.make_data_return(f"[{self.name}]|Error: Excepted 'file_name' and 'text' keys"), 400
+                return data, 200
+            
+            return self.make_data_return(f"[{self.name}]|Error: {msg}"), 400
+        except:
+            return self.make_data_return(f"[{self.name}]|Error: {msg}"), 400
+
+
+    def create_file(self, update=False):
+        data, status = self.get_data()
+        if status != 200:
+            return data, status
+
+        file_name = data['file_name']
+        text = data['text']
+
+        file_path = f'{self.backup_path}/{file_name}'
+        if not update:
+            if self.check_file_exist(file_path):
+                return self.make_data_return(f"[{self.name}]|Error: File '{file_name}' exists :/"), 400
+        else:
+            os.system('rm -rf {file_path}')
+
+        with open(file_path, 'w+') as f:
+            f.write(text)
+
+        return self.make_data_return(f"[{self.name}] File '{file_name}' successfuly created :)"), 200
+
+
+    def update_file(self):
+        msg, status = self.create_file(update=True)
+        if status == 200:
+            file_name = msg.split("'")[1]
+            return self.make_data_return(f"[{self.name}] File '{file_name}' successfuly updated :D"), status
+        return msg, status
+
+
+    def append_file(self):
+        data, status = self.get_data()
+        if status != 200:
+            return data, status
+
+        file_name = data['file_name']
+        text = data['text']
+
+        file_path = f'{self.backup_path}/{file_name}'
+        if not self.check_file_exist(file_path):
+            return self.make_data_return(f"[{self.name}]|Error: File '{file_name}' do not exists :X"), 400
+
+        with open(file_path, 'a') as f:
+            f.write(text)
+
+        return self.make_data_return(f"[{self.name}] Text '{text}' successfuly appended in '{file_name}' :)"), 200
+
+
+    def delete_file(self):
+        data, status = self.get_data()
+        if status != 200:
+            return data, status
+
+        file_name = data['file_name']
+        text = data['text']
+
+        file_path = f'{self.backup_path}/{file_name}'
+        if not self.check_file_exist(file_path):
+            return self.make_data_return(f"[{self.name}]|Error: File '{file_name}' do not exists :X"), 400
+
+        os.system(f'rm -rf {file_path}')
+        return self.make_data_return(f"[{self.name}] File '{file_name}' successfuly deleted :)"), 200
+
+
+    def get_file(self):
+        data, status = self.get_data()
+        if status != 200:
+            return data, status
+
+        file_name = data['file_name']
+        text = data['text']
+
+        file_path = f'{self.backup_path}/{file_name}'
+        if not self.check_file_exist(file_path):
+            return self.make_data_return(f"[{self.name}]|Error: File '{file_name}' do not exists :X"), 400
+
+        with open(file_path, 'r') as f:
+            file_data = f.read()
+
+        return self.make_data_return(file_data), 200
+
