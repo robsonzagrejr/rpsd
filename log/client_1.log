@@ -1,3 +1,5 @@
 ======Client_1 Log======
-[Client_1:2020-11-23 11:20:46:648972] Making a request to update file
-[Client_1:2020-11-23 11:20:46:741670] Answer from [Replicator_Manager][200]: File 'file_test.txt' successfuly updated :)
+[Client_1:2020-11-23 12:45:04:380479] [REQUEST][UPDATE] 'Text update by "Client_1"' > 'file_test_2.txt'
+[Client_1:2020-11-23 12:45:04:438950] [RESPONSE][UPDATE][Replicator_Manager][200]: File 'file_test_2.txt' successfuly updated :)
+[Client_1:2020-11-23 12:45:04:439584] [REQUEST][APPEND] 'Text append by "Client_1"' > 'file_test_2.txt'
+[Client_1:2020-11-23 12:45:04:498792] [RESPONSE][APPEND][Replicator_Manager][200]: File 'file_test_2.txt' successfuly updated :)
