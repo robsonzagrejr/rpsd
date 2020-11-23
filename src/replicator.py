@@ -109,19 +109,19 @@ class Replicator(Process):
                 200
             ),
             'not_exists': (
-                f"[ERROR] File '{file_name}' not exist :X",
+                f"File '{file_name}' not exist :X",
                 400
             ),
             'exists': (
-                f"[ERROR] File '{file_name}' exists :X",
+                f"File '{file_name}' exists :X",
                 400
             ),
             'request_key': (
-                f"[ERROR] Request need to contain '{key}' in json :X",
+                f"Request need to contain '{key}' in json :X",
                 400
             ),
             'request_json': (
-                f"[ERROR] Request need to be json :X",
+                f"Request need to be json :X",
                 400
             )
         }
@@ -163,14 +163,14 @@ class Replicator(Process):
         request = data is None
         data, status = self.get_data(data=data)
         if status != 200:
-            self.log(f'{data} : {status}')
+            self.log(f'[ERROR][{status}]: {data}')
             return data, status
 
         if request:
             if not update:
-                self.log(f"Request from {data['send_id']} to create {data['file_name']} with '{data['text']}'")
+                self.log(f"[RECIVE][REQUEST][{data['send_id']}][CREATE]: {data['file_name']}")
             else:
-                self.log(f"Request from {data['send_id']} to update {data['file_name']} with '{data['text']}'")
+                self.log(f"[RECIVE][REQUEST][{data['send_id']}][UPDATE]: '{data['text']}' in {data['file_name']}")
 
         file_name = data['file_name']
         text = data['text']
@@ -197,7 +197,7 @@ class Replicator(Process):
     def update_file(self, data=None):
         msg, status = self.create_file(update=True, data=data)
         if status != 200:
-            self.log(f'{msg} : {status}')
+            self.log(f'[ERROR][{status}]: {msg}')
             return msg, status
 
         file_name = msg.split("'")[1]
@@ -211,11 +211,11 @@ class Replicator(Process):
         request = data is None
         data, status = self.get_data(data=data)
         if status != 200:
-            self.log(f'{data} : {status}')
+            self.log(f'[ERROR][{status}]: {data}')
             return data, status
             
         if request:
-            self.log(f"Request from {data['send_id']} to append '{data['text']}' in {data['file_name']}")
+            self.log(f"[RECIVE][REQUEST][{data['send_id']}][APPEND]: '{data['text']}' in {data['file_name']}")
 
 
         file_name = data['file_name']
@@ -224,7 +224,7 @@ class Replicator(Process):
         file_path = f'{self.backup_path}/{file_name}'
         if not self.check_file_exist(file_path):
             msg, status = self.get_msg('not_exists', file_name=file_name)
-            self.log(msg)
+            self.log(f'[ERROR][{status}]: {msg}')
             return msg, status
 
         with open(file_path, 'a') as f:
@@ -239,11 +239,11 @@ class Replicator(Process):
         request = data is None
         data, status = self.get_data(data=data)
         if status != 200:
-            self.log(f'{data} : {status}')
+            self.log(f'[ERROR][{status}]: {data}')
             return data, status
 
         if request:
-            self.log(f"Request from {data['send_id']} to delete {data['file_name']}")
+            self.log(f"[RECIVE][REQUEST][{data['send_id']}][DELETE]: {data['file_name']}")
 
         file_name = data['file_name']
         text = data['text']
@@ -251,7 +251,7 @@ class Replicator(Process):
         file_path = f'{self.backup_path}/{file_name}'
         if not self.check_file_exist(file_path):
             msg, status = self.get_msg('not_exists', file_name=file_name)
-            self.log(msg)
+            self.log(f'[ERROR][{status}]: {msg}')
             return msg, status
 
         os.system(f'rm -rf {file_path}')
@@ -264,11 +264,11 @@ class Replicator(Process):
         request = data is None
         data, status = self.get_data(data=data)
         if status != 200:
-            self.log(f'{data} : {status}')
+            self.log(f'[ERROR][{status}]: {data}')
             return data, status
 
         if request:
-            self.log(f"Request from {data['send_id']} to get {data['file_name']}")
+            self.log(f"[RECIVE][REQUEST][{data['send_id']}][GET]: {data['file_name']}")
 
         file_name = data['file_name']
         text = data['text']
@@ -276,7 +276,7 @@ class Replicator(Process):
         file_path = f'{self.backup_path}/{file_name}'
         if not self.check_file_exist(file_path):
             msg, status = self.get_msg('not_exists', file_name=file_name)
-            self.log(msg)
+            self.log(f'[ERROR][{status}]: {msg}')
             return msg, status
 
         with open(file_path, 'r') as f:

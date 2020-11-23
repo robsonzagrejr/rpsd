@@ -59,7 +59,7 @@ class ReplicatorManager(Replicator):
             self.log(data)
             return data, status
         event_wait = self.manager.Event()
-        self.log(f"Request from {data['send_id']} for {data['request']['type']}: {data['request']['data']}")
+        self.log(f"[RECIVE][REQUEST][{data['send_id']}][{data['request']['type'].upper()}]: {data['request']['data']}")
         #self.request_queue.put(
         self.request_queue.append(
             (
@@ -77,12 +77,12 @@ class ReplicatorManager(Replicator):
 
     def make_request(self, replicator, client_name, data, rq_type, request_answer_key):
         data['send_id'] = self.name
-        self.log(f'Sending request {client_name} for {replicator.name}')
+        self.log(f'[SEND][REQUEST][{replicator.name}]: from {client_name} > {data}')
         answer = requests.post(
                 f'http://{replicator.ip}:{replicator.port}/{rq_type}_file',
                 json=data
         ) 
-        self.log(f'Answer from [{replicator.name}][{answer.status_code}]: {answer.text}')
+        self.log(f'[RECIVE][RESPONSE][{replicator.name}][{answer.status_code}]: {answer.text}')
         if answer.status_code != 200:
             self.request_answer[request_answer_key] = (answer.text, answer.status_code)
         return
@@ -97,7 +97,7 @@ class ReplicatorManager(Replicator):
 
                 # Picking request
                 client_timestamp, client_name, client_request, event_wait = self.request_queue.pop(0)
-                self.log(f'Executing request {client_name}: {client_request}')
+                self.log(f'[EXECUTE][({client_timestamp},{client_name})]: {client_request}')
                 client_request['data']['send_id'] = client_name
 
                 if client_request['type'] == 'create':

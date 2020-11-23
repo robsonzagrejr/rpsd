@@ -26,10 +26,12 @@ if __name__ == '__main__':
     for i in range(1, 3):
         clients.append(
             Client(
+                id=i,
                 name=f'Client_{i}',
                 ip_replicator_manager=f'http://{replicator_manager.ip}:{replicator_manager.port}',
                 log_server_path=log_path,
-                log_server_lock=log_lock
+                log_server_lock=log_lock,
+                run_type='simple'
             )
         )
 
