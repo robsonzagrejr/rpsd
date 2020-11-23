@@ -31,15 +31,16 @@ class ReplicatorManager(Replicator):
             r.start()
 
         # Variables
-        self.request_queue = Queue()
+        #self.request_queue = Queue()
         self.manager = Manager()
+        self.request_queue = self.manager.list()
         self.request_answer = self.manager.dict()
 
         # URL
         self.add_endpoint(endpoint='/', handler=self.get_request, methods=['POST'])
 
         # Process to solve requests
-        self.solver_process = Process(target=self.solve_request, args=(self.request_answer,))
+        self.solver_process = Process(target=self.solve_request)
         self.solver_process.start()
         return
 
@@ -59,7 +60,8 @@ class ReplicatorManager(Replicator):
             return data, status
         event_wait = self.manager.Event()
         self.log(f"Request from {data['send_id']} for {data['request']['type']}: {data['request']['data']}")
-        self.request_queue.put(
+        #self.request_queue.put(
+        self.request_queue.append(
             (
                 data['timestamp'],
                 data['send_id'],
@@ -73,7 +75,7 @@ class ReplicatorManager(Replicator):
         return answer[0], answer[1]
 
 
-    def make_request(self, replicator, client_name, data, rq_type, request_answer_key, request_answer):
+    def make_request(self, replicator, client_name, data, rq_type, request_answer_key):
         data['send_id'] = self.name
         self.log(f'Sending request {client_name} for {replicator.name}')
         answer = requests.post(
@@ -82,19 +84,22 @@ class ReplicatorManager(Replicator):
         ) 
         self.log(f'Answer from [{replicator.name}][{answer.status_code}]: {answer.text}')
         if answer.status_code != 200:
-            request_answer[request_answer_key] = (answer.text, answer.status_code)
+            self.request_answer[request_answer_key] = (answer.text, answer.status_code)
         return
 
 
-    def solve_request(self, request_answer):
+    def solve_request(self):
         while True:
-            if not self.request_queue.empty():
-                #print("\n=============================\n")
-                client_timestamp, client_name, client_request, event_wait = self.request_queue.get(0)
+            #if not self.request_queue.empty():
+            if self.request_queue:
+                # Sort requests by timestamp
+                self.request_queue.sort()
+
+                # Picking request
+                client_timestamp, client_name, client_request, event_wait = self.request_queue.pop(0)
                 self.log(f'Executing request {client_name}: {client_request}')
-                #print(f"[self.name] Estou resolvendo {client_request}")
-                #time.sleep(1)
                 client_request['data']['send_id'] = client_name
+
                 if client_request['type'] == 'create':
                     answer = self.create_file(data=client_request['data'])
                 elif client_request['type'] == 'update':
@@ -106,15 +111,14 @@ class ReplicatorManager(Replicator):
                 elif client_request['type'] == 'get':
                     answer = self.get_file(data=client_request['data'])
                 request_answer_key = (client_name, client_timestamp)
-                request_answer[request_answer_key] = answer
+                self.request_answer[request_answer_key] = answer
 
                 # If an Error occurs
                 if answer[1] != 200:
                     event_wait.set()
                     continue
 
-                #time.sleep(2)
-                #print(f"RESOLVI O {client_request}")
+                # Send request to relicators
                 replicators_request = []
                 for replicator in self.replicators: 
                     #print(f"Encaminhando {client_request} para {replicator.name}")
@@ -127,12 +131,13 @@ class ReplicatorManager(Replicator):
                                 client_request['data'], 
                                 client_request['type'],
                                 request_answer_key,
-                                request_answer,
                             )
                         )
                     )
                 for rq in replicators_request:
                     rq.start()
+
+                # Waiting for replicators
                 for rq in replicators_request:
                     rq.join()
 
