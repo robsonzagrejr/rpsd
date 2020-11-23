@@ -1,0 +1,5 @@
+======Replicator_2 Log======
+[Replicator_2:2020-11-23 11:20:46:691122] Request from Replicator_Manager to update file_test.txt with 'Text update by Client_2 Client'
+[Replicator_2:2020-11-23 11:20:46:696029] File 'file_test.txt' successfuly updated :)
+[Replicator_2:2020-11-23 11:20:46:728013] Request from Replicator_Manager to update file_test.txt with 'Text update by Client_1 Client'
+[Replicator_2:2020-11-23 11:20:46:732438] File 'file_test.txt' successfuly updated :)

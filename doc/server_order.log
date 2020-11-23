@@ -1,0 +1,35 @@
+======Server Log======
+[Client_2:2020-11-23 11:16:37:656150] Making a request to update file
+[Client_1:2020-11-23 11:16:37:656512] Making a request to update file
+[Replicator_Manager:2020-11-23 11:16:37:667330] Request from Client_1 for update: {'file_name': 'file_test.txt', 'text': 'Text update by Client_1 Client'}
+[Replicator_Manager:2020-11-23 11:16:37:667553] Request from Client_2 for update: {'file_name': 'file_test.txt', 'text': 'Text update by Client_2 Client'}
+[Replicator_Manager:2020-11-23 11:16:37:670208] Executing request Client_2: {'type': 'update', 'data': {'file_name': 'file_test.txt', 'text': 'Text update by Client_2 Client'}}
+[Replicator_Manager:2020-11-23 11:16:37:673753] File 'file_test.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 11:16:37:679442] Sending request Client_2 for Replicator_1
+[Replicator_Manager:2020-11-23 11:16:37:680018] Sending request Client_2 for Replicator_2
+[Replicator_Manager:2020-11-23 11:16:37:681312] Sending request Client_2 for Replicator_3
+[Replicator_1:2020-11-23 11:16:37:687064] Request from Replicator_Manager to update file_test.txt with 'Text update by Client_2 Client'
+[Replicator_2:2020-11-23 11:16:37:687236] Request from Replicator_Manager to update file_test.txt with 'Text update by Client_2 Client'
+[Replicator_3:2020-11-23 11:16:37:688522] Request from Replicator_Manager to update file_test.txt with 'Text update by Client_2 Client'
+[Replicator_2:2020-11-23 11:16:37:690813] File 'file_test.txt' successfuly updated :)
+[Replicator_1:2020-11-23 11:16:37:691042] File 'file_test.txt' successfuly updated :)
+[Replicator_3:2020-11-23 11:16:37:692230] File 'file_test.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 11:16:37:693019] Answer from [Replicator_1][200]: File 'file_test.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 11:16:37:693636] Answer from [Replicator_2][200]: File 'file_test.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 11:16:37:694265] Answer from [Replicator_3][200]: File 'file_test.txt' successfuly updated :)
+[Client_2:2020-11-23 11:16:37:700702] Answer from [Replicator_Manager][200]: File 'file_test.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 11:16:37:700947] Executing request Client_1: {'type': 'update', 'data': {'file_name': 'file_test.txt', 'text': 'Text update by Client_1 Client'}}
+[Replicator_Manager:2020-11-23 11:16:37:706484] File 'file_test.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 11:16:37:714791] Sending request Client_1 for Replicator_1
+[Replicator_Manager:2020-11-23 11:16:37:715695] Sending request Client_1 for Replicator_2
+[Replicator_Manager:2020-11-23 11:16:37:721231] Sending request Client_1 for Replicator_3
+[Replicator_1:2020-11-23 11:16:37:722933] Request from Replicator_Manager to update file_test.txt with 'Text update by Client_1 Client'
+[Replicator_2:2020-11-23 11:16:37:723619] Request from Replicator_Manager to update file_test.txt with 'Text update by Client_1 Client'
+[Replicator_1:2020-11-23 11:16:37:727785] File 'file_test.txt' successfuly updated :)
+[Replicator_2:2020-11-23 11:16:37:729935] File 'file_test.txt' successfuly updated :)
+[Replicator_3:2020-11-23 11:16:37:730240] Request from Replicator_Manager to update file_test.txt with 'Text update by Client_1 Client'
+[Replicator_Manager:2020-11-23 11:16:37:730478] Answer from [Replicator_1][200]: File 'file_test.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 11:16:37:731657] Answer from [Replicator_2][200]: File 'file_test.txt' successfuly updated :)
+[Replicator_3:2020-11-23 11:16:37:734135] File 'file_test.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 11:16:37:735868] Answer from [Replicator_3][200]: File 'file_test.txt' successfuly updated :)
+[Client_1:2020-11-23 11:16:37:740647] Answer from [Replicator_Manager][200]: File 'file_test.txt' successfuly updated :)
