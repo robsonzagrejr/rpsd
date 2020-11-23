@@ -9,3 +9,6 @@ server:
 
 app:
 	poetry run python app.py
+
+test:
+	poetry run python teste.py
