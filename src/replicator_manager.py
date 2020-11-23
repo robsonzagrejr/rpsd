@@ -94,6 +94,7 @@ class ReplicatorManager(Replicator):
                 self.log(f'Executing request {client_name}: {client_request}')
                 #print(f"[self.name] Estou resolvendo {client_request}")
                 #time.sleep(1)
+                client_request['data']['send_id'] = client_name
                 if client_request['type'] == 'create':
                     answer = self.create_file(data=client_request['data'])
                 elif client_request['type'] == 'update':
@@ -108,9 +109,9 @@ class ReplicatorManager(Replicator):
                 request_answer[request_answer_key] = answer
 
                 # If an Error occurs
-                #if answer[1] != 200:
-                    #event_wait.set()
-                    #continue
+                if answer[1] != 200:
+                    event_wait.set()
+                    continue
 
                 #time.sleep(2)
                 #print(f"RESOLVI O {client_request}")
