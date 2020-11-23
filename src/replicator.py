@@ -34,7 +34,7 @@ class Replicator(Process):
         self.log_path = f'log/{self.name.lower()}.log'
         os.system(f'rm -rf {self.log_path}')
         with open(self.log_path, 'w+') as log:
-            log.write('======{self.name} Log======')
+            log.write(f'======{self.name} Log======')
 
         self.log_server_path = log_server_path
         self.log_server_lock = log_server_lock
@@ -109,19 +109,19 @@ class Replicator(Process):
                 200
             ),
             'not_exists': (
-                f"File '{file_name}' not exist :X",
+                f"[ERROR] File '{file_name}' not exist :X",
                 400
-            )
+            ),
             'exists': (
-                f"File '{file_name}' exists :X",
+                f"[ERROR] File '{file_name}' exists :X",
                 400
-            )
+            ),
             'request_key': (
-                f"Request need to contain '{key}' in json :X",
+                f"[ERROR] Request need to contain '{key}' in json :X",
                 400
-            )
+            ),
             'request_json': (
-                f"Request need to be json :X",
+                f"[ERROR] Request need to be json :X",
                 400
             )
         }
@@ -150,12 +150,12 @@ class Replicator(Process):
             if data:
                 for k in keys:
                     if k not in data.keys():
-                        return self.make_data_return(f"[{self.name}]|Error: Excepted '{k}' keys"), 400
+                        return self.get_msg('request_key', key=k)
                 return data, 200
             
-            return self.make_data_return(f"[{self.name}]|Error: {msg}"), 400
+            return self.get_msg('request_json')
         except:
-            return self.make_data_return(f"[{self.name}]|Error: {msg}"), 400
+            return self.get_msg('request_json')
 
 
     def create_file(self, update=False, data=None):
@@ -164,6 +164,10 @@ class Replicator(Process):
             if status != 200:
                 self.log(f'{data} : {status}')
                 return data, status
+            if not update:
+                self.log(f"Request from {data['send_id']} to create {data['file_name']} with '{data['text']}'")
+            else:
+                self.log(f"Request from {data['send_id']} to update {data['file_name']} with '{data['text']}'")
 
         file_name = data['file_name']
         text = data['text']
@@ -171,14 +175,20 @@ class Replicator(Process):
         file_path = f'{self.backup_path}/{file_name}'
         if not update:
             if self.check_file_exist(file_path):
-                return self.make_data_return(f"[{self.name}]|Error: File '{file_name}' exists :/"), 400
+                msg, status = self.get_msg('exists', file_name=file_name)
+                self.log(msg)
+                return msg, status
+
         else:
             os.system('rm -rf {file_path}')
 
         with open(file_path, 'w+') as f:
             f.write(text)
 
-        return self.make_data_return(f"[{self.name}] File '{file_name}' successfuly created :)"), 200
+        msg, status = self.get_msg('create', file_name=file_name)
+        if not update:
+            self.log(msg)
+        return msg, status
 
 
     def update_file(self, data=None):
@@ -188,7 +198,10 @@ class Replicator(Process):
             return msg, status
 
         file_name = msg.split("'")[1]
-        return self.make_data_return(f"[{self.name}] File '{file_name}' successfuly updated :D"), status
+
+        msg, status = self.get_msg('update', file_name=file_name)
+        self.log(msg)
+        return msg, status
 
 
     def append_file(self, data=None):
@@ -197,18 +210,24 @@ class Replicator(Process):
             if status != 200:
                 self.log(f'{data} : {status}')
                 return data, status
+            
+            self.log(f"Request from {data['send_id']} to append '{data['text']}' in {data['file_name']}")
 
         file_name = data['file_name']
         text = data['text']
 
         file_path = f'{self.backup_path}/{file_name}'
         if not self.check_file_exist(file_path):
-            return self.make_data_return(f"[{self.name}]|Error: File '{file_name}' do not exists :X"), 400
+            msg, status = self.get_msg('not_exists', file_name=file_name)
+            self.log(msg)
+            return msg, status
 
         with open(file_path, 'a') as f:
             f.write(text)
 
-        return self.make_data_return(f"[{self.name}] Text '{text}' successfuly appended in '{file_name}' :)"), 200
+        msg, status = self.get_msg('update', file_name=file_name, text=text)
+        self.log(msg)
+        return msg, status
 
 
     def delete_file(self, data=None):
@@ -217,16 +236,21 @@ class Replicator(Process):
             if status != 200:
                 self.log(f'{data} : {status}')
                 return data, status
+            self.log(f"Request from {data['send_id']} to delete {data['file_name']}")
 
         file_name = data['file_name']
         text = data['text']
 
         file_path = f'{self.backup_path}/{file_name}'
         if not self.check_file_exist(file_path):
-            return self.make_data_return(f"[{self.name}]|Error: File '{file_name}' do not exists :X"), 400
+            msg, status = self.get_msg('not_exists', file_name=file_name)
+            self.log(msg)
+            return msg, status
 
         os.system(f'rm -rf {file_path}')
-        return self.make_data_return(f"[{self.name}] File '{file_name}' successfuly deleted :)"), 200
+        msg, status = self.get_msg('delete', file_name=file_name)
+        self.log(msg)
+        return msg, status
 
 
     def get_file(self, data=None):
@@ -235,16 +259,21 @@ class Replicator(Process):
             if status != 200:
                 self.log(f'{data} : {status}')
                 return data, status
+            self.log(f"Request from {data['send_id']} to get {data['file_name']}")
 
         file_name = data['file_name']
         text = data['text']
 
         file_path = f'{self.backup_path}/{file_name}'
         if not self.check_file_exist(file_path):
-            return self.make_data_return(f"[{self.name}]|Error: File '{file_name}' do not exists :X"), 400
+            msg, status = self.get_msg('not_exists', file_name=file_name)
+            self.log(msg)
+            return msg, status
 
         with open(file_path, 'r') as f:
             file_data = f.read()
 
-        return self.make_data_return(file_data), 200
+        msg, status = self.get_msg('get', file_name=file_name)
+        self.log(msg)
+        return json.dumps(file_data), status
 

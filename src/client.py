@@ -13,6 +13,8 @@ class Client(Process):
         self.ip_replicator_manager = ip_replicator_manager
         self.log_path = f'log/{name.lower()}.log'
         os.system(f'rm -rf {self.log_path}')
+        with open(self.log_path, 'w+') as log:
+            log.write(f'======{self.name} Log======')
 
         self.log_server_path = log_server_path
         self.log_server_lock = log_server_lock
@@ -40,11 +42,11 @@ class Client(Process):
 
     def mounting_request(self, type_request, file_name, text):
         return {
+            'send_id':self.name,
             'timestamp':str(time.time()),
             'request': {
                 'type': type_request,
                 'data': {
-                    'send_id':self.name,
                     'file_name': file_name,
                     'text': text
                 }
@@ -53,14 +55,12 @@ class Client(Process):
 
 
     def update_file(self):
-        sleep_time = (random.random()*100) % 3
-        time.sleep(sleep_time)
         self.log('Making a request to update file')
-        response = requests.post(
+        answer = requests.post(
                 self.ip_replicator_manager,
                 json=self.mounting_request('update', f'file_test.txt', f'Text update by {self.name} Client')
         ) 
-        self.log('Recive answer from replicator manager')
+        self.log(f'Answer from [Replicator_Manager][{answer.status_code}]: {answer.text}')
         return
 
 
