@@ -33,6 +33,7 @@ class Replicator(Process):
         self.app = Flask(name)
         self.name = name
         self.port = port
+        self.ip = '0.0.0.0'
 
         # Routes
         if server:
@@ -48,7 +49,7 @@ class Replicator(Process):
 
 
     def run(self):
-        self.app.run(host='0.0.0.0', port=self.port, debug=False)
+        self.app.run(host=self.ip, port=self.port, debug=False)
         return
 
 
@@ -86,7 +87,6 @@ class Replicator(Process):
         try:
             data = request.get_json()
             if data:
-                print(keys)
                 for k in keys:
                     if k not in data.keys():
                         return self.make_data_return(f"[{self.name}]|Error: Excepted '{k}' keys"), 400

@@ -51,7 +51,10 @@ def test_manager_u(number):
     return
 
 pool = Pool(processes=10)
+t = time.time()
 pool.map(test_manager, range(10))
+print("********************")
+print(time.time() - t)
 
 pool.map(test_manager_u, range(10))
 

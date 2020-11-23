@@ -1,8 +1,9 @@
+from multiprocessing import Process, Queue, Event, Manager
 import time
 import json
 import random
-from flask import Flask, Response, request
-from multiprocessing import Process, Queue
+import requests
+
 from src.server.replicator import Replicator
 
 class ReplicatorManager(Replicator):
@@ -16,17 +17,21 @@ class ReplicatorManager(Replicator):
             r.start()
 
         self.request_queue = Queue()
+        self.manager = Manager()
 
         self.add_endpoint(endpoint='/', handler=self.get_request, methods=['POST'])
 
         # Process to solve requests
-        Process(target=self.solve_request).start()
+        self.solver_process = Process(target=self.solve_request)
+        self.solver_process.start()
         return
 
     def run(self):
         super().run()
+        #Kill childs
+        self.solver_process.terminate()
         for r in self.replicators:
-            r.join()
+            r.terminate()
         return
 
 
@@ -34,16 +39,29 @@ class ReplicatorManager(Replicator):
         data, status = self.get_data(keys=['request', 'timestamp'])
         if status != 200:
             return data, status
-        self.request_queue.put((data['timestamp'], data['request']))
+        event_wait = self.manager.Event()
+        #print(f"Request {data['request']}")
+        self.request_queue.put((data['timestamp'], data['request'], event_wait))
+        event_wait.wait()
+        #print(f"Waking {data['request']}")
         return f"Request {json.dumps(data)} add to queue :)", 200
+
+
+    def make_request(self, replicator, data, rq_type):
+        response = requests.post(
+                f'http://{replicator.ip}:{replicator.port}/{rq_type}_file',
+                json=data
+        ) 
+        return
 
 
     def solve_request(self):
         while True:
             if not self.request_queue.empty():
-                print("\n=============================\n")
-                _, client_request = self.request_queue.get(0)
-                print(f"[self.name] Estou resolvendo {client_request}")
+                #print("\n=============================\n")
+                _, client_request, event_wait = self.request_queue.get(0)
+                #print(f"[self.name] Estou resolvendo {client_request}")
+                #time.sleep(1)
                 if client_request['type'] == 'create':
                     self.create_file(data=client_request['data'])
                 elif client_request['type'] == 'update':
@@ -55,7 +73,21 @@ class ReplicatorManager(Replicator):
                 elif client_request['type'] == 'get':
                     self.get_file(data=client_request['data'])
 
-                time.sleep(0.2)
+                #time.sleep(2)
+                #print(f"RESOLVI O {client_request}")
+                replicators_request = []
+                for replicator in self.replicators: 
+                    print(f"Encaminhando {client_request} para {replicator.name}")
+                    replicators_request.append(Process(target=self.make_request,
+                        args=(replicator, client_request['data'], client_request['type'])))
+                for rq in replicators_request:
+                    rq.start()
+                for rq in replicators_request:
+                    rq.join()
+
+                event_wait.set()
+
+
 
 
 
