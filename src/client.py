@@ -47,7 +47,7 @@ class Client(Process):
             'request': {
                 'type': type_request,
                 'data': {
-                    'file_name': file_name,
+                    #'file_name': file_name,
                     'text': text
                 }
             }

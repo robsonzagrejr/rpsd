@@ -9,6 +9,8 @@ if __name__ == '__main__':
     log_lock = server_manager.Lock()
     log_path = 'log/server.log'
     os.system(f'rm -rf {log_path}')
+    with open(log_path, 'w+') as log:
+        log.write('======Server Log======')
 
     #Replicator Manager
     replicator_manager = ReplicatorManager(
