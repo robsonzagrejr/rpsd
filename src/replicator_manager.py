@@ -4,15 +4,15 @@ import json
 import random
 import requests
 
-from src.server.replicator import Replicator
+from src.replicator import Replicator
 
 class ReplicatorManager(Replicator):
 
-    def __init__(self, name, port, n_replicators=2):
+    def __init__(self, name, port, n_replicators=3):
         super().__init__(name=name, port=port, server=False)
         self.replicators = []
         for i in range(1, n_replicators+1):
-            r = Replicator(name=f'R{i}', port=port+i)
+            r = Replicator(name=f'Replicator_{i}', port=port+i)
             self.replicators.append(r)
             r.start()
 
@@ -33,6 +33,10 @@ class ReplicatorManager(Replicator):
         for r in self.replicators:
             r.terminate()
         return
+
+
+    def log(self, text):
+        pass
 
 
     def get_request(self):
