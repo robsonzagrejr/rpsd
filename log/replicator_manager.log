@@ -1,0 +1,19 @@
+======Replicator_Manager Log======
+[Replicator_Manager:2020-11-23 11:20:46:664620] Request from Client_2 for update: {'file_name': 'file_test.txt', 'text': 'Text update by Client_2 Client'}
+[Replicator_Manager:2020-11-23 11:20:46:665040] Request from Client_1 for update: {'file_name': 'file_test.txt', 'text': 'Text update by Client_1 Client'}
+[Replicator_Manager:2020-11-23 11:20:46:668358] Executing request Client_2: {'type': 'update', 'data': {'file_name': 'file_test.txt', 'text': 'Text update by Client_2 Client'}}
+[Replicator_Manager:2020-11-23 11:20:46:672932] File 'file_test.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 11:20:46:683555] Sending request Client_2 for Replicator_1
+[Replicator_Manager:2020-11-23 11:20:46:683590] Sending request Client_2 for Replicator_2
+[Replicator_Manager:2020-11-23 11:20:46:684053] Sending request Client_2 for Replicator_3
+[Replicator_Manager:2020-11-23 11:20:46:697780] Answer from [Replicator_1][200]: File 'file_test.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 11:20:46:699780] Answer from [Replicator_2][200]: File 'file_test.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 11:20:46:701176] Answer from [Replicator_3][200]: File 'file_test.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 11:20:46:706342] Executing request Client_1: {'type': 'update', 'data': {'file_name': 'file_test.txt', 'text': 'Text update by Client_1 Client'}}
+[Replicator_Manager:2020-11-23 11:20:46:712193] File 'file_test.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 11:20:46:717116] Sending request Client_1 for Replicator_1
+[Replicator_Manager:2020-11-23 11:20:46:719633] Sending request Client_1 for Replicator_2
+[Replicator_Manager:2020-11-23 11:20:46:719977] Sending request Client_1 for Replicator_3
+[Replicator_Manager:2020-11-23 11:20:46:731334] Answer from [Replicator_1][200]: File 'file_test.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 11:20:46:734072] Answer from [Replicator_2][200]: File 'file_test.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 11:20:46:734270] Answer from [Replicator_3][200]: File 'file_test.txt' successfuly updated :)
