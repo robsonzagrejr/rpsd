@@ -144,9 +144,10 @@ class Replicator(Process):
         return os.path.exists(f'{main_path}/{file_name}')
 
     
-    def get_data(self, msg='Except json data', keys=['file_name', 'text', 'send_id']):
+    def get_data(self, msg='Except json data', keys=['file_name', 'text', 'send_id'], data=None):
         try:
-            data = request.get_json()
+            if not data:
+                data = request.get_json()
             if data:
                 for k in keys:
                     if k not in data.keys():
@@ -159,11 +160,13 @@ class Replicator(Process):
 
 
     def create_file(self, update=False, data=None):
-        if not data:
-            data, status = self.get_data()
-            if status != 200:
-                self.log(f'{data} : {status}')
-                return data, status
+        request = data is None
+        data, status = self.get_data(data=data)
+        if status != 200:
+            self.log(f'{data} : {status}')
+            return data, status
+
+        if request:
             if not update:
                 self.log(f"Request from {data['send_id']} to create {data['file_name']} with '{data['text']}'")
             else:
@@ -205,13 +208,15 @@ class Replicator(Process):
 
 
     def append_file(self, data=None):
-        if not data:
-            data, status = self.get_data()
-            if status != 200:
-                self.log(f'{data} : {status}')
-                return data, status
+        request = data is None
+        data, status = self.get_data(data=data)
+        if status != 200:
+            self.log(f'{data} : {status}')
+            return data, status
             
+        if request:
             self.log(f"Request from {data['send_id']} to append '{data['text']}' in {data['file_name']}")
+
 
         file_name = data['file_name']
         text = data['text']
@@ -231,11 +236,13 @@ class Replicator(Process):
 
 
     def delete_file(self, data=None):
-        if not data:
-            data, status = self.get_data()
-            if status != 200:
-                self.log(f'{data} : {status}')
-                return data, status
+        request = data is None
+        data, status = self.get_data(data=data)
+        if status != 200:
+            self.log(f'{data} : {status}')
+            return data, status
+
+        if request:
             self.log(f"Request from {data['send_id']} to delete {data['file_name']}")
 
         file_name = data['file_name']
@@ -254,11 +261,13 @@ class Replicator(Process):
 
 
     def get_file(self, data=None):
-        if not data:
-            data, status = self.get_data()
-            if status != 200:
-                self.log(f'{data} : {status}')
-                return data, status
+        request = data is None
+        data, status = self.get_data(data=data)
+        if status != 200:
+            self.log(f'{data} : {status}')
+            return data, status
+
+        if request:
             self.log(f"Request from {data['send_id']} to get {data['file_name']}")
 
         file_name = data['file_name']

@@ -17,6 +17,7 @@ class ReplicatorManager(Replicator):
             log_server_lock=log_server_lock,
             server=False
         )
+        # Replicators
         self.replicators = []
         for i in range(1, n_replicators+1):
             r = Replicator(
@@ -29,13 +30,16 @@ class ReplicatorManager(Replicator):
             self.replicators.append(r)
             r.start()
 
+        # Variables
         self.request_queue = Queue()
         self.manager = Manager()
+        self.request_answer = self.manager.dict()
 
+        # URL
         self.add_endpoint(endpoint='/', handler=self.get_request, methods=['POST'])
 
         # Process to solve requests
-        self.solver_process = Process(target=self.solve_request)
+        self.solver_process = Process(target=self.solve_request, args=(self.request_answer,))
         self.solver_process.start()
         return
 
@@ -54,7 +58,7 @@ class ReplicatorManager(Replicator):
             self.log(data)
             return data, status
         event_wait = self.manager.Event()
-        self.log(f"Request from data['send_id'] for {data['request']['type']}: {data['request']['data']}")
+        self.log(f"Request from {data['send_id']} for {data['request']['type']}: {data['request']['data']}")
         self.request_queue.put(
             (
                 data['timestamp'],
@@ -63,12 +67,13 @@ class ReplicatorManager(Replicator):
                 event_wait
             )
         )
+        request_answer_key = (data['send_id'], data['timestamp'])
         event_wait.wait()
-        #print(f"Waking {data['request']}")
-        return f"Request {json.dumps(data)} add to queue :)", 200
+        answer = self.request_answer[request_answer_key]
+        return answer[0], answer[1]
 
 
-    def make_request(self, replicator, client_name, data, rq_type):
+    def make_request(self, replicator, client_name, data, rq_type, request_answer_key, request_answer):
         data['send_id'] = self.name
         self.log(f'Sending request {client_name} for {replicator.name}')
         answer = requests.post(
@@ -76,43 +81,61 @@ class ReplicatorManager(Replicator):
                 json=data
         ) 
         self.log(f'Answer from [{replicator.name}][{answer.status_code}]: {answer.text}')
+        if answer.status_code != 200:
+            request_answer[request_answer_key] = (answer.text, answer.status_code)
         return
 
 
-    def solve_request(self):
+    def solve_request(self, request_answer):
         while True:
             if not self.request_queue.empty():
                 #print("\n=============================\n")
-                _, client_name, client_request, event_wait = self.request_queue.get(0)
+                client_timestamp, client_name, client_request, event_wait = self.request_queue.get(0)
                 self.log(f'Executing request {client_name}: {client_request}')
                 #print(f"[self.name] Estou resolvendo {client_request}")
                 #time.sleep(1)
+                client_request['data']['send_id'] = client_name
                 if client_request['type'] == 'create':
-                    self.create_file(data=client_request['data'])
+                    answer = self.create_file(data=client_request['data'])
                 elif client_request['type'] == 'update':
-                    self.update_file(data=client_request['data'])
+                    answer = self.update_file(data=client_request['data'])
                 elif client_request['type'] == 'append':
-                    self.append_file(data=client_request['data'])
+                    answer = self.append_file(data=client_request['data'])
                 elif client_request['type'] == 'delete':
-                    self.delete_file(data=client_request['data'])
+                    answer = self.delete_file(data=client_request['data'])
                 elif client_request['type'] == 'get':
-                    self.get_file(data=client_request['data'])
+                    answer = self.get_file(data=client_request['data'])
+                request_answer_key = (client_name, client_timestamp)
+                request_answer[request_answer_key] = answer
+
+                # If an Error occurs
+                if answer[1] != 200:
+                    event_wait.set()
+                    continue
 
                 #time.sleep(2)
                 #print(f"RESOLVI O {client_request}")
                 replicators_request = []
                 for replicator in self.replicators: 
                     #print(f"Encaminhando {client_request} para {replicator.name}")
-                    replicators_request.append(Process(target=self.make_request,
-                        args=(replicator, client_name, client_request['data'], client_request['type'])))
+                    replicators_request.append(
+                        Process(
+                            target=self.make_request,
+                            args=(
+                                replicator,
+                                client_name,
+                                client_request['data'], 
+                                client_request['type'],
+                                request_answer_key,
+                                request_answer,
+                            )
+                        )
+                    )
                 for rq in replicators_request:
                     rq.start()
                 for rq in replicators_request:
                     rq.join()
 
                 event_wait.set()
-
-
-
-
+                continue
 
