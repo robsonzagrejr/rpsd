@@ -22,7 +22,7 @@ class EndpointAction(object):
 
 class Replicator(Process):
 
-    def __init__(self, name, port, log_server_path, log_server_lock, server=True):
+    def __init__(self, name, ip, port, log_server_path, log_server_lock, server=True):
         Process.__init__(self, name=name)
 
         # File System
@@ -42,13 +42,13 @@ class Replicator(Process):
         # Server definitions
         self.app = Flask(name)
         self.name = name
+        self.ip = ip
         self.port = port
-        self.ip = '0.0.0.0'
 
         # Routes
         if server:
             self.add_endpoint(endpoint='/', handler=self.hello_world)
-            self.add_endpoint(endpoint='/data', handler=self.data, methods=['POST'])
+            #self.add_endpoint(endpoint='/data', handler=self.data, methods=['POST'])
             self.add_endpoint(endpoint='/create_file', handler=self.create_file, methods=['POST'])
             self.add_endpoint(endpoint='/update_file', handler=self.update_file, methods=['POST'])
             self.add_endpoint(endpoint='/append_file', handler=self.append_file, methods=['POST'])
@@ -72,14 +72,6 @@ class Replicator(Process):
         return f'Hello, World! my name is {self.name}', 200
 
 
-    def data(self):
-        try:
-            data = request.get_json()
-            return json.dumps(data), 200
-        except:
-            return f"Replicator {self.name} except json data", 400
-
-
     def log(self, text):
         with open(self.log_path, 'a') as log:
             time_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
@@ -94,6 +86,49 @@ class Replicator(Process):
         return
 
 
+    def get_msg(self, msg_type, file_name=None, text=None, key=None):
+        msg = {
+            'create': (
+                f"File '{file_name}' successfuly created :)",
+                200
+            ),
+            'update': (
+                f"File '{file_name}' successfuly updated :)",
+                200
+            ),
+            'append': (
+                f"Text '{text}' successfuly appended to '{file_name}' :)",
+                200
+            ),
+            'delete': (
+                f"File '{file_name}' successfuly deleted :)",
+                200
+            ),
+            'get': (
+                f"File '{file_name}' successfuly returned :)",
+                200
+            ),
+            'not_exists': (
+                f"File '{file_name}' not exist :X",
+                400
+            )
+            'exists': (
+                f"File '{file_name}' exists :X",
+                400
+            )
+            'request_key': (
+                f"Request need to contain '{key}' in json :X",
+                400
+            )
+            'request_json': (
+                f"Request need to be json :X",
+                400
+            )
+        }
+        return msg[msg_type]
+
+
+    """
     def make_data_return(self, data):
         return json.dumps(
             {
@@ -101,13 +136,15 @@ class Replicator(Process):
                 'data':data
             }
         )
+    """
+
 
     def check_file_exist(self, file_name):
         main_path = Path(__main__.__file__).parent
         return os.path.exists(f'{main_path}/{file_name}')
 
     
-    def get_data(self, msg='Except json data', keys=['file_name', 'text']):
+    def get_data(self, msg='Except json data', keys=['file_name', 'text', 'send_id']):
         try:
             data = request.get_json()
             if data:

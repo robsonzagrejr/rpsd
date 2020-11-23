@@ -42,9 +42,9 @@ class Client(Process):
         return {
             'timestamp':str(time.time()),
             'request': {
-                'send_id':self.name,
                 'type': type_request,
                 'data': {
+                    'send_id':self.name,
                     'file_name': file_name,
                     'text': text
                 }
