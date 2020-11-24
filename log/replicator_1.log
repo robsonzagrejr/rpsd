@@ -1,11 +1,11 @@
 ======Replicator_1 Log======
-[Replicator_1:2020-11-23 22:45:48:720366] [RECIVE][REQUEST][Replicator_Manager][UPDATE]: 'Text update by "Client_1"' in file_test_2.txt
-[Replicator_1:2020-11-23 22:45:48:724956] File 'file_test_2.txt' successfuly updated :)
-[Replicator_1:2020-11-23 22:45:48:751785] [RECIVE][REQUEST][Replicator_Manager][UPDATE]: 'Text update by "Client_2"' in file_test_1.txt
-[Replicator_1:2020-11-23 22:45:48:757472] File 'file_test_1.txt' successfuly updated :)
-[Replicator_1:2020-11-23 22:45:48:781991] [RECIVE][REQUEST][Replicator_Manager][APPEND]: '
+[Replicator_1:2020-11-23 22:47:26:129879] [RECIVE][REQUEST][Replicator_Manager][UPDATE]: 'Text update by "Client_1"' in file_test_2.txt
+[Replicator_1:2020-11-23 22:47:26:134034] File 'file_test_2.txt' successfuly updated :)
+[Replicator_1:2020-11-23 22:47:26:166613] [RECIVE][REQUEST][Replicator_Manager][UPDATE]: 'Text update by "Client_2"' in file_test_1.txt
+[Replicator_1:2020-11-23 22:47:26:171504] File 'file_test_1.txt' successfuly updated :)
+[Replicator_1:2020-11-23 22:47:26:205434] [RECIVE][REQUEST][Replicator_Manager][APPEND]: '
 Text append by "Client_1"' in file_test_2.txt
-[Replicator_1:2020-11-23 22:45:48:783354] File 'file_test_2.txt' successfuly updated :)
-[Replicator_1:2020-11-23 22:45:48:801363] [RECIVE][REQUEST][Replicator_Manager][APPEND]: '
+[Replicator_1:2020-11-23 22:47:26:206643] File 'file_test_2.txt' successfuly updated :)
+[Replicator_1:2020-11-23 22:47:26:226824] [RECIVE][REQUEST][Replicator_Manager][APPEND]: '
 Text append by "Client_2"' in file_test_1.txt
-[Replicator_1:2020-11-23 22:45:48:802135] File 'file_test_1.txt' successfuly updated :)
+[Replicator_1:2020-11-23 22:47:26:227816] File 'file_test_1.txt' successfuly updated :)

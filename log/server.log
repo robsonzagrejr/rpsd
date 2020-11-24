@@ -1,75 +1,75 @@
 ======Server Log======
-[Client_1:2020-11-23 22:45:48:667508] [REQUEST][UPDATE] 'Text update by "Client_1"' > 'file_test_2.txt'
-[Client_2:2020-11-23 22:45:48:667948] [REQUEST][UPDATE] 'Text update by "Client_2"' > 'file_test_1.txt'
-[Replicator_Manager:2020-11-23 22:45:48:701455] [RECIVE][REQUEST][Client_1][UPDATE]: {'file_name': 'file_test_2.txt', 'text': 'Text update by "Client_1"'}
-[Replicator_Manager:2020-11-23 22:45:48:701867] [RECIVE][REQUEST][Client_2][UPDATE]: {'file_name': 'file_test_1.txt', 'text': 'Text update by "Client_2"'}
-[Replicator_Manager:2020-11-23 22:45:48:704041] [EXECUTE][(1606182348.6676097,Client_1)]: {'type': 'update', 'data': {'file_name': 'file_test_2.txt', 'text': 'Text update by "Client_1"'}}
-[Replicator_Manager:2020-11-23 22:45:48:707898] File 'file_test_2.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:713805] [SEND][REQUEST][Replicator_1]: from Client_1 > {'file_name': 'file_test_2.txt', 'text': 'Text update by "Client_1"', 'send_id': 'Replicator_Manager'}
-[Replicator_Manager:2020-11-23 22:45:48:714460] [SEND][REQUEST][Replicator_2]: from Client_1 > {'file_name': 'file_test_2.txt', 'text': 'Text update by "Client_1"', 'send_id': 'Replicator_Manager'}
-[Replicator_Manager:2020-11-23 22:45:48:715315] [SEND][REQUEST][Replicator_3]: from Client_1 > {'file_name': 'file_test_2.txt', 'text': 'Text update by "Client_1"', 'send_id': 'Replicator_Manager'}
-[Replicator_1:2020-11-23 22:45:48:721324] [RECIVE][REQUEST][Replicator_Manager][UPDATE]: 'Text update by "Client_1"' in file_test_2.txt
-[Replicator_2:2020-11-23 22:45:48:721454] [RECIVE][REQUEST][Replicator_Manager][UPDATE]: 'Text update by "Client_1"' in file_test_2.txt
-[Replicator_3:2020-11-23 22:45:48:722478] [RECIVE][REQUEST][Replicator_Manager][UPDATE]: 'Text update by "Client_1"' in file_test_2.txt
-[Replicator_2:2020-11-23 22:45:48:725169] File 'file_test_2.txt' successfuly updated :)
-[Replicator_1:2020-11-23 22:45:48:725330] File 'file_test_2.txt' successfuly updated :)
-[Replicator_3:2020-11-23 22:45:48:725990] File 'file_test_2.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:727276] [RECIVE][RESPONSE][Replicator_2][200]: File 'file_test_2.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:727445] [RECIVE][RESPONSE][Replicator_1][200]: File 'file_test_2.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:727823] [RECIVE][RESPONSE][Replicator_3][200]: File 'file_test_2.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:733167] [EXECUTE][(1606182348.6680458,Client_2)]: {'type': 'update', 'data': {'file_name': 'file_test_1.txt', 'text': 'Text update by "Client_2"'}}
-[Client_1:2020-11-23 22:45:48:734626] [RESPONSE][UPDATE][Replicator_Manager][200]: File 'file_test_2.txt' successfuly updated :)
-[Client_1:2020-11-23 22:45:48:734855] [REQUEST][APPEND] 'Text append by "Client_1"' > 'file_test_2.txt'
-[Replicator_Manager:2020-11-23 22:45:48:736846] File 'file_test_1.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:739133] [RECIVE][REQUEST][Client_1][APPEND]: {'file_name': 'file_test_2.txt', 'text': '\nText append by "Client_1"'}
-[Replicator_Manager:2020-11-23 22:45:48:745265] [SEND][REQUEST][Replicator_1]: from Client_2 > {'file_name': 'file_test_1.txt', 'text': 'Text update by "Client_2"', 'send_id': 'Replicator_Manager'}
-[Replicator_Manager:2020-11-23 22:45:48:746132] [SEND][REQUEST][Replicator_3]: from Client_2 > {'file_name': 'file_test_1.txt', 'text': 'Text update by "Client_2"', 'send_id': 'Replicator_Manager'}
-[Replicator_1:2020-11-23 22:45:48:752976] [RECIVE][REQUEST][Replicator_Manager][UPDATE]: 'Text update by "Client_2"' in file_test_1.txt
-[Replicator_Manager:2020-11-23 22:45:48:753290] [SEND][REQUEST][Replicator_2]: from Client_2 > {'file_name': 'file_test_1.txt', 'text': 'Text update by "Client_2"', 'send_id': 'Replicator_Manager'}
-[Replicator_3:2020-11-23 22:45:48:753501] [RECIVE][REQUEST][Replicator_Manager][UPDATE]: 'Text update by "Client_2"' in file_test_1.txt
-[Replicator_1:2020-11-23 22:45:48:757671] File 'file_test_1.txt' successfuly updated :)
-[Replicator_3:2020-11-23 22:45:48:757875] File 'file_test_1.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:759380] [RECIVE][RESPONSE][Replicator_1][200]: File 'file_test_1.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:759595] [RECIVE][RESPONSE][Replicator_3][200]: File 'file_test_1.txt' successfuly updated :)
-[Replicator_2:2020-11-23 22:45:48:760317] [RECIVE][REQUEST][Replicator_Manager][UPDATE]: 'Text update by "Client_2"' in file_test_1.txt
-[Replicator_2:2020-11-23 22:45:48:763935] File 'file_test_1.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:765309] [RECIVE][RESPONSE][Replicator_2][200]: File 'file_test_1.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:769694] [EXECUTE][(1606182348.7349231,Client_1)]: {'type': 'append', 'data': {'file_name': 'file_test_2.txt', 'text': '\nText append by "Client_1"'}}
-[Client_2:2020-11-23 22:45:48:770021] [RESPONSE][UPDATE][Replicator_Manager][200]: File 'file_test_1.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:770194] File 'file_test_2.txt' successfuly updated :)
-[Client_2:2020-11-23 22:45:48:770346] [REQUEST][APPEND] 'Text append by "Client_2"' > 'file_test_1.txt'
-[Replicator_Manager:2020-11-23 22:45:48:774776] [RECIVE][REQUEST][Client_2][APPEND]: {'file_name': 'file_test_1.txt', 'text': '\nText append by "Client_2"'}
-[Replicator_Manager:2020-11-23 22:45:48:776580] [SEND][REQUEST][Replicator_1]: from Client_1 > {'file_name': 'file_test_2.txt', 'text': '\nText append by "Client_1"', 'send_id': 'Replicator_Manager'}
-[Replicator_Manager:2020-11-23 22:45:48:776745] [SEND][REQUEST][Replicator_2]: from Client_1 > {'file_name': 'file_test_2.txt', 'text': '\nText append by "Client_1"', 'send_id': 'Replicator_Manager'}
-[Replicator_Manager:2020-11-23 22:45:48:777503] [SEND][REQUEST][Replicator_3]: from Client_1 > {'file_name': 'file_test_2.txt', 'text': '\nText append by "Client_1"', 'send_id': 'Replicator_Manager'}
-[Replicator_2:2020-11-23 22:45:48:782844] [RECIVE][REQUEST][Replicator_Manager][APPEND]: '
+[Client_1:2020-11-23 22:47:26:098676] [REQUEST][UPDATE] 'Text update by "Client_1"' > 'file_test_2.txt'
+[Client_2:2020-11-23 22:47:26:100023] [REQUEST][UPDATE] 'Text update by "Client_2"' > 'file_test_1.txt'
+[Replicator_Manager:2020-11-23 22:47:26:108322] [RECIVE][REQUEST][Client_1][UPDATE]: {'file_name': 'file_test_2.txt', 'text': 'Text update by "Client_1"'}
+[Replicator_Manager:2020-11-23 22:47:26:108547] [RECIVE][REQUEST][Client_2][UPDATE]: {'file_name': 'file_test_1.txt', 'text': 'Text update by "Client_2"'}
+[Replicator_Manager:2020-11-23 22:47:26:110590] [EXECUTE][(1606182446.0987778,Client_1)]: {'type': 'update', 'data': {'file_name': 'file_test_2.txt', 'text': 'Text update by "Client_1"'}}
+[Replicator_Manager:2020-11-23 22:47:26:114102] File 'file_test_2.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 22:47:26:120692] [SEND][REQUEST][Replicator_1]: from Client_1 > {'file_name': 'file_test_2.txt', 'text': 'Text update by "Client_1"', 'send_id': 'Replicator_Manager'}
+[Replicator_Manager:2020-11-23 22:47:26:121689] [SEND][REQUEST][Replicator_2]: from Client_1 > {'file_name': 'file_test_2.txt', 'text': 'Text update by "Client_1"', 'send_id': 'Replicator_Manager'}
+[Replicator_Manager:2020-11-23 22:47:26:123069] [SEND][REQUEST][Replicator_3]: from Client_1 > {'file_name': 'file_test_2.txt', 'text': 'Text update by "Client_1"', 'send_id': 'Replicator_Manager'}
+[Replicator_2:2020-11-23 22:47:26:129297] [RECIVE][REQUEST][Replicator_Manager][UPDATE]: 'Text update by "Client_1"' in file_test_2.txt
+[Replicator_1:2020-11-23 22:47:26:130462] [RECIVE][REQUEST][Replicator_Manager][UPDATE]: 'Text update by "Client_1"' in file_test_2.txt
+[Replicator_2:2020-11-23 22:47:26:133059] File 'file_test_2.txt' successfuly updated :)
+[Replicator_1:2020-11-23 22:47:26:134212] File 'file_test_2.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 22:47:26:135069] [RECIVE][RESPONSE][Replicator_2][200]: File 'file_test_2.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 22:47:26:136137] [RECIVE][RESPONSE][Replicator_1][200]: File 'file_test_2.txt' successfuly updated :)
+[Replicator_3:2020-11-23 22:47:26:138531] [RECIVE][REQUEST][Replicator_Manager][UPDATE]: 'Text update by "Client_1"' in file_test_2.txt
+[Replicator_3:2020-11-23 22:47:26:144920] File 'file_test_2.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 22:47:26:146734] [RECIVE][RESPONSE][Replicator_3][200]: File 'file_test_2.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 22:47:26:151356] [EXECUTE][(1606182446.1001306,Client_2)]: {'type': 'update', 'data': {'file_name': 'file_test_1.txt', 'text': 'Text update by "Client_2"'}}
+[Client_1:2020-11-23 22:47:26:152851] [RESPONSE][UPDATE][Replicator_Manager][200]: File 'file_test_2.txt' successfuly updated :)
+[Client_1:2020-11-23 22:47:26:153239] [REQUEST][APPEND] 'Text append by "Client_1"' > 'file_test_2.txt'
+[Replicator_Manager:2020-11-23 22:47:26:155746] File 'file_test_1.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 22:47:26:157827] [RECIVE][REQUEST][Client_1][APPEND]: {'file_name': 'file_test_2.txt', 'text': '\nText append by "Client_1"'}
+[Replicator_Manager:2020-11-23 22:47:26:161024] [SEND][REQUEST][Replicator_1]: from Client_2 > {'file_name': 'file_test_1.txt', 'text': 'Text update by "Client_2"', 'send_id': 'Replicator_Manager'}
+[Replicator_Manager:2020-11-23 22:47:26:162897] [SEND][REQUEST][Replicator_3]: from Client_2 > {'file_name': 'file_test_1.txt', 'text': 'Text update by "Client_2"', 'send_id': 'Replicator_Manager'}
+[Replicator_Manager:2020-11-23 22:47:26:163219] [SEND][REQUEST][Replicator_2]: from Client_2 > {'file_name': 'file_test_1.txt', 'text': 'Text update by "Client_2"', 'send_id': 'Replicator_Manager'}
+[Replicator_1:2020-11-23 22:47:26:167431] [RECIVE][REQUEST][Replicator_Manager][UPDATE]: 'Text update by "Client_2"' in file_test_1.txt
+[Replicator_3:2020-11-23 22:47:26:170385] [RECIVE][REQUEST][Replicator_Manager][UPDATE]: 'Text update by "Client_2"' in file_test_1.txt
+[Replicator_1:2020-11-23 22:47:26:171794] File 'file_test_1.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 22:47:26:176817] [RECIVE][RESPONSE][Replicator_1][200]: File 'file_test_1.txt' successfuly updated :)
+[Replicator_3:2020-11-23 22:47:26:177446] File 'file_test_1.txt' successfuly updated :)
+[Replicator_2:2020-11-23 22:47:26:177755] [RECIVE][REQUEST][Replicator_Manager][UPDATE]: 'Text update by "Client_2"' in file_test_1.txt
+[Replicator_Manager:2020-11-23 22:47:26:179226] [RECIVE][RESPONSE][Replicator_3][200]: File 'file_test_1.txt' successfuly updated :)
+[Replicator_2:2020-11-23 22:47:26:181561] File 'file_test_1.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 22:47:26:184118] [RECIVE][RESPONSE][Replicator_2][200]: File 'file_test_1.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 22:47:26:192521] [EXECUTE][(1606182446.153372,Client_1)]: {'type': 'append', 'data': {'file_name': 'file_test_2.txt', 'text': '\nText append by "Client_1"'}}
+[Replicator_Manager:2020-11-23 22:47:26:193026] File 'file_test_2.txt' successfuly updated :)
+[Client_2:2020-11-23 22:47:26:193172] [RESPONSE][UPDATE][Replicator_Manager][200]: File 'file_test_1.txt' successfuly updated :)
+[Client_2:2020-11-23 22:47:26:193481] [REQUEST][APPEND] 'Text append by "Client_2"' > 'file_test_1.txt'
+[Replicator_Manager:2020-11-23 22:47:26:199280] [RECIVE][REQUEST][Client_2][APPEND]: {'file_name': 'file_test_1.txt', 'text': '\nText append by "Client_2"'}
+[Replicator_Manager:2020-11-23 22:47:26:199840] [SEND][REQUEST][Replicator_1]: from Client_1 > {'file_name': 'file_test_2.txt', 'text': '\nText append by "Client_1"', 'send_id': 'Replicator_Manager'}
+[Replicator_Manager:2020-11-23 22:47:26:200552] [SEND][REQUEST][Replicator_2]: from Client_1 > {'file_name': 'file_test_2.txt', 'text': '\nText append by "Client_1"', 'send_id': 'Replicator_Manager'}
+[Replicator_Manager:2020-11-23 22:47:26:201538] [SEND][REQUEST][Replicator_3]: from Client_1 > {'file_name': 'file_test_2.txt', 'text': '\nText append by "Client_1"', 'send_id': 'Replicator_Manager'}
+[Replicator_1:2020-11-23 22:47:26:206335] [RECIVE][REQUEST][Replicator_Manager][APPEND]: '
 Text append by "Client_1"' in file_test_2.txt
-[Replicator_1:2020-11-23 22:45:48:783057] [RECIVE][REQUEST][Replicator_Manager][APPEND]: '
+[Replicator_2:2020-11-23 22:47:26:206583] [RECIVE][REQUEST][Replicator_Manager][APPEND]: '
 Text append by "Client_1"' in file_test_2.txt
-[Replicator_3:2020-11-23 22:45:48:783241] [RECIVE][REQUEST][Replicator_Manager][APPEND]: '
+[Replicator_1:2020-11-23 22:47:26:206756] File 'file_test_2.txt' successfuly updated :)
+[Replicator_2:2020-11-23 22:47:26:206927] File 'file_test_2.txt' successfuly updated :)
+[Replicator_3:2020-11-23 22:47:26:207700] [RECIVE][REQUEST][Replicator_Manager][APPEND]: '
 Text append by "Client_1"' in file_test_2.txt
-[Replicator_2:2020-11-23 22:45:48:783367] File 'file_test_2.txt' successfuly updated :)
-[Replicator_1:2020-11-23 22:45:48:783478] File 'file_test_2.txt' successfuly updated :)
-[Replicator_3:2020-11-23 22:45:48:783601] File 'file_test_2.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:784871] [RECIVE][RESPONSE][Replicator_2][200]: File 'file_test_2.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:785065] [RECIVE][RESPONSE][Replicator_1][200]: File 'file_test_2.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:785203] [RECIVE][RESPONSE][Replicator_3][200]: File 'file_test_2.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:790498] [EXECUTE][(1606182348.7704237,Client_2)]: {'type': 'append', 'data': {'file_name': 'file_test_1.txt', 'text': '\nText append by "Client_2"'}}
-[Client_1:2020-11-23 22:45:48:790827] [RESPONSE][APPEND][Replicator_Manager][200]: File 'file_test_2.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:790935] File 'file_test_1.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:795846] [SEND][REQUEST][Replicator_1]: from Client_2 > {'file_name': 'file_test_1.txt', 'text': '\nText append by "Client_2"', 'send_id': 'Replicator_Manager'}
-[Replicator_Manager:2020-11-23 22:45:48:796471] [SEND][REQUEST][Replicator_2]: from Client_2 > {'file_name': 'file_test_1.txt', 'text': '\nText append by "Client_2"', 'send_id': 'Replicator_Manager'}
-[Replicator_Manager:2020-11-23 22:45:48:797504] [SEND][REQUEST][Replicator_3]: from Client_2 > {'file_name': 'file_test_1.txt', 'text': '\nText append by "Client_2"', 'send_id': 'Replicator_Manager'}
-[Replicator_1:2020-11-23 22:45:48:801960] [RECIVE][REQUEST][Replicator_Manager][APPEND]: '
+[Replicator_3:2020-11-23 22:47:26:208041] File 'file_test_2.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 22:47:26:208321] [RECIVE][RESPONSE][Replicator_1][200]: File 'file_test_2.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 22:47:26:209228] [RECIVE][RESPONSE][Replicator_2][200]: File 'file_test_2.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 22:47:26:209734] [RECIVE][RESPONSE][Replicator_3][200]: File 'file_test_2.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 22:47:26:215637] [EXECUTE][(1606182446.1935651,Client_2)]: {'type': 'append', 'data': {'file_name': 'file_test_1.txt', 'text': '\nText append by "Client_2"'}}
+[Replicator_Manager:2020-11-23 22:47:26:215948] File 'file_test_1.txt' successfuly updated :)
+[Client_1:2020-11-23 22:47:26:216067] [RESPONSE][APPEND][Replicator_Manager][200]: File 'file_test_2.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 22:47:26:221258] [SEND][REQUEST][Replicator_1]: from Client_2 > {'file_name': 'file_test_1.txt', 'text': '\nText append by "Client_2"', 'send_id': 'Replicator_Manager'}
+[Replicator_Manager:2020-11-23 22:47:26:221890] [SEND][REQUEST][Replicator_2]: from Client_2 > {'file_name': 'file_test_1.txt', 'text': '\nText append by "Client_2"', 'send_id': 'Replicator_Manager'}
+[Replicator_Manager:2020-11-23 22:47:26:222499] [SEND][REQUEST][Replicator_3]: from Client_2 > {'file_name': 'file_test_1.txt', 'text': '\nText append by "Client_2"', 'send_id': 'Replicator_Manager'}
+[Replicator_1:2020-11-23 22:47:26:227413] [RECIVE][REQUEST][Replicator_Manager][APPEND]: '
 Text append by "Client_2"' in file_test_1.txt
-[Replicator_1:2020-11-23 22:45:48:802219] File 'file_test_1.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:804393] [RECIVE][RESPONSE][Replicator_1][200]: File 'file_test_1.txt' successfuly updated :)
-[Replicator_3:2020-11-23 22:45:48:804711] [RECIVE][REQUEST][Replicator_Manager][APPEND]: '
+[Replicator_1:2020-11-23 22:47:26:227952] File 'file_test_1.txt' successfuly updated :)
+[Replicator_2:2020-11-23 22:47:26:228812] [RECIVE][REQUEST][Replicator_Manager][APPEND]: '
 Text append by "Client_2"' in file_test_1.txt
-[Replicator_3:2020-11-23 22:45:48:805003] File 'file_test_1.txt' successfuly updated :)
-[Replicator_2:2020-11-23 22:45:48:805908] [RECIVE][REQUEST][Replicator_Manager][APPEND]: '
+[Replicator_Manager:2020-11-23 22:47:26:229845] [RECIVE][RESPONSE][Replicator_1][200]: File 'file_test_1.txt' successfuly updated :)
+[Replicator_2:2020-11-23 22:47:26:230048] File 'file_test_1.txt' successfuly updated :)
+[Replicator_3:2020-11-23 22:47:26:230235] [RECIVE][REQUEST][Replicator_Manager][APPEND]: '
 Text append by "Client_2"' in file_test_1.txt
-[Replicator_2:2020-11-23 22:45:48:806187] File 'file_test_1.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:806418] [RECIVE][RESPONSE][Replicator_3][200]: File 'file_test_1.txt' successfuly updated :)
-[Replicator_Manager:2020-11-23 22:45:48:807825] [RECIVE][RESPONSE][Replicator_2][200]: File 'file_test_1.txt' successfuly updated :)
-[Client_2:2020-11-23 22:45:48:816938] [RESPONSE][APPEND][Replicator_Manager][200]: File 'file_test_1.txt' successfuly updated :)
+[Replicator_3:2020-11-23 22:47:26:230773] File 'file_test_1.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 22:47:26:232051] [RECIVE][RESPONSE][Replicator_2][200]: File 'file_test_1.txt' successfuly updated :)
+[Replicator_Manager:2020-11-23 22:47:26:232245] [RECIVE][RESPONSE][Replicator_3][200]: File 'file_test_1.txt' successfuly updated :)
+[Client_2:2020-11-23 22:47:26:237049] [RESPONSE][APPEND][Replicator_Manager][200]: File 'file_test_1.txt' successfuly updated :)
